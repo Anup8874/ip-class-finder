@@ -5,349 +5,361 @@ app = Flask(__name__)
 
 HTML = """
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>IP CLASS FINDER</title>
+    <title>Anup Verma | IP Class Finder</title>
 
-<style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        body {
+            background: #050505;
+            color: #00ff41;
+            font-family: "Courier New", monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-body {
-    margin: 0;
-    background: #050505;
-    color: #00ff88;
-    font-family: "Courier New", monospace;
-    min-height: 100vh;
-}
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(0,255,65,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,65,0.025) 1px, transparent 1px);
+            background-size: 35px 35px;
+        }
 
-/* Background grid */
+        .container {
+            width: 92%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 25px 0 50px;
+        }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background:
-        linear-gradient(rgba(0,255,136,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,136,.04) 1px, transparent 1px);
-    background-size: 35px 35px;
-    pointer-events: none;
-}
+        .top-header {
+            text-align: center;
+            padding: 20px 0 18px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #00ff41;
+            box-shadow: 0 5px 20px rgba(0,255,65,0.08);
+        }
 
-/* Header */
+        .name {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            color: #00ff41;
+            text-shadow:
+                0 0 5px #00ff41,
+                0 0 15px #00ff41;
+        }
 
-.header {
-    border-bottom: 1px solid #00ff88;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0,255,136,.15);
-}
+        .role {
+            margin-top: 8px;
+            color: #888;
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
 
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    text-shadow: 0 0 12px #00ff88;
-}
+        .title-box {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-.status {
-    margin-top: 8px;
-    font-size: 13px;
-}
+        .title {
+            font-size: 38px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-shadow:
+                0 0 5px #00ff41,
+                0 0 15px #00ff41;
+        }
 
-.dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: #00ff88;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #00ff88;
-}
+        .status {
+            margin-top: 10px;
+            color: #00ff41;
+            font-size: 13px;
+        }
 
-/* Main */
+        .dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background: #00ff41;
+            border-radius: 50%;
+            margin-right: 7px;
+            box-shadow: 0 0 10px #00ff41;
+        }
 
-.container {
-    max-width: 900px;
-    margin: 45px auto;
-    padding: 20px;
-}
+        .card {
+            background: rgba(0, 15, 5, 0.92);
+            border: 1px solid #00ff41;
+            padding: 30px;
+            box-shadow:
+                0 0 20px rgba(0,255,65,0.08),
+                inset 0 0 20px rgba(0,255,65,0.025);
+        }
 
-.panel {
-    border: 1px solid #00ff88;
-    background: rgba(0, 20, 10, .75);
-    padding: 30px;
-    box-shadow: 0 0 25px rgba(0,255,136,.12);
-}
+        .terminal-line {
+            color: #888;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
 
-.title {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
+        .prompt {
+            color: #00ff41;
+        }
 
-/* Input */
+        .form {
+            display: flex;
+            gap: 12px;
+        }
 
-.input-area {
-    display: flex;
-    gap: 10px;
-}
+        input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
 
-input {
-    flex: 1;
-    padding: 15px;
-    background: #020a06;
-    border: 1px solid #00ff88;
-    color: #00ff88;
-    font-family: inherit;
-    font-size: 16px;
-    outline: none;
-}
+        input::placeholder {
+            color: #386b43;
+        }
 
-input:focus {
-    box-shadow: 0 0 15px rgba(0,255,136,.3);
-}
+        input:focus {
+            box-shadow: 0 0 15px rgba(0,255,65,0.25);
+        }
 
-button {
-    padding: 15px 25px;
-    background: #00ff88;
-    color: #00150a;
-    border: none;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-}
+        button {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 0 28px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-button:hover {
-    box-shadow: 0 0 20px #00ff88;
-}
+        button:hover {
+            background: #8aff9f;
+            box-shadow: 0 0 20px rgba(0,255,65,0.6);
+        }
 
-/* Result */
+        .error {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #ff3333;
+            color: #ff5555;
+            background: rgba(255,0,0,0.05);
+        }
 
-.result {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
+        .result {
+            margin-top: 30px;
+        }
 
-.card {
-    border: 1px solid #155c3b;
-    background: #07120d;
-    padding: 18px;
-}
+        .result-title {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #173d20;
+            padding-bottom: 10px;
+        }
 
-.label {
-    color: #777;
-    font-size: 12px;
-    margin-bottom: 7px;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
 
-.value {
-    color: #00ff88;
-    font-size: 17px;
-    font-weight: bold;
-}
+        .item {
+            border: 1px solid #174d24;
+            background: #020a04;
+            padding: 18px;
+        }
 
-.class-card {
-    grid-column: span 2;
-    text-align: center;
-    border: 1px solid #00ff88;
-}
+        .label {
+            color: #777;
+            font-size: 11px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
 
-.class-value {
-    font-size: 42px;
-    font-weight: bold;
-    text-shadow: 0 0 20px #00ff88;
-}
+        .value {
+            color: #00ff41;
+            font-size: 18px;
+            font-weight: bold;
+            word-break: break-word;
+        }
 
-/* Error */
+        .class-value {
+            font-size: 30px;
+            text-shadow: 0 0 10px #00ff41;
+        }
 
-.error {
-    margin-top: 20px;
-    border: 1px solid #ff3333;
-    color: #ff3333;
-    padding: 15px;
-}
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            color: #555;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
 
-/* Footer */
+        .footer span {
+            color: #00ff41;
+        }
 
-.footer {
-    text-align: center;
-    margin-top: 30px;
-    color: #555;
-    font-size: 12px;
-}
+        @media (max-width: 650px) {
+            .name {
+                font-size: 23px;
+                letter-spacing: 5px;
+            }
 
-@media(max-width:600px) {
+            .title {
+                font-size: 25px;
+            }
 
-    .input-area {
-        flex-direction: column;
-    }
+            .form {
+                flex-direction: column;
+            }
 
-    .result {
-        grid-template-columns: 1fr;
-    }
+            button {
+                padding: 15px;
+            }
 
-    .class-card {
-        grid-column: span 1;
-    }
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-    .logo {
-        font-size: 20px;
-    }
-}
-
-</style>
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="header">
-
-    <div class="logo">
-        [ IP CLASS FINDER ]
-    </div>
-
-    <div class="status">
-        <span class="dot"></span>
-        SYSTEM ONLINE // NETWORK ANALYZER
-    </div>
-
-</div>
-
-
 <div class="container">
 
-<div class="panel">
-
-<div class="title">
-    > ENTER TARGET IPv4
-</div>
-
-<form method="GET">
-
-<div class="input-area">
-
-<input
-    type="text"
-    name="ip"
-    placeholder="192.168.1.10"
-    value="{{ ip }}"
-    autocomplete="off"
->
-
-<button type="submit">
-    ANALYZE
-</button>
-
-</div>
-
-</form>
-
-
-{% if result %}
-
-<div class="result">
-
-    <div class="card class-card">
-
-        <div class="label">
-            IP CLASS
-        </div>
-
-        <div class="class-value">
-            CLASS {{ result.cls }}
-        </div>
-
+    <div class="top-header">
+        <div class="name">ANUP VERMA</div>
+        <div class="role">NETWORK • LINUX • SECURITY</div>
     </div>
 
+    <div class="title-box">
+        <div class="title">IP CLASS FINDER</div>
+
+        <div class="status">
+            <span class="dot"></span>
+            SYSTEM ONLINE // NETWORK ANALYZER
+        </div>
+    </div>
 
     <div class="card">
 
-        <div class="label">
-            IP ADDRESS
+        <div class="terminal-line">
+            <span class="prompt">root@anup:~$</span>
+            enter IPv4 address for analysis
         </div>
 
-        <div class="value">
-            {{ result.ip }}
+        <form class="form" method="GET">
+
+            <input
+                type="text"
+                name="ip"
+                value="{{ ip }}"
+                placeholder="Example: 192.168.1.10"
+                autocomplete="off"
+                required
+            >
+
+            <button type="submit">
+                ANALYZE
+            </button>
+
+        </form>
+
+        {% if error %}
+        <div class="error">
+            [ERROR] {{ error }}
         </div>
+        {% endif %}
+
+        {% if result %}
+
+        <div class="result">
+
+            <div class="result-title">
+                // ANALYSIS RESULT
+            </div>
+
+            <div class="grid">
+
+                <div class="item">
+                    <div class="label">IP Address</div>
+                    <div class="value">{{ result.ip }}</div>
+                </div>
+
+                <div class="item">
+                    <div class="label">IP Class</div>
+                    <div class="value class-value">
+                        {{ result.ip_class }}
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="label">Subnet Mask</div>
+                    <div class="value">
+                        {{ result.subnet }}
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="label">CIDR</div>
+                    <div class="value">
+                        {{ result.cidr }}
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="label">Network Address</div>
+                    <div class="value">
+                        {{ result.network }}
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="label">Broadcast Address</div>
+                    <div class="value">
+                        {{ result.broadcast }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {% endif %}
 
     </div>
 
-
-    <div class="card">
-
-        <div class="label">
-            SUBNET MASK
-        </div>
-
-        <div class="value">
-            {{ result.mask }}
-        </div>
-
+    <div class="footer">
+        DEVELOPED BY <span>ANUP VERMA</span>
+        // IP NETWORK ANALYSIS TOOL
     </div>
-
-
-    <div class="card">
-
-        <div class="label">
-            CIDR
-        </div>
-
-        <div class="value">
-            {{ result.cidr }}
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="label">
-            NETWORK
-        </div>
-
-        <div class="value">
-            {{ result.network }}
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="label">
-            BROADCAST
-        </div>
-
-        <div class="value">
-            {{ result.broadcast }}
-        </div>
-
-    </div>
-
-</div>
-
-{% endif %}
-
-
-{% if error %}
-
-<div class="error">
-    [ERROR] {{ error }}
-</div>
-
-{% endif %}
-
-</div>
-
-<div class="footer">
-    IP ANALYSIS TERMINAL // RHEL LAB
-</div>
 
 </div>
 
@@ -356,7 +368,91 @@ button:hover {
 """
 
 
-@app.route("/")
+def analyze_ip(ip_input):
+
+    ip_obj = ipaddress.IPv4Address(ip_input)
+    first_octet = int(str(ip_obj).split(".")[0])
+
+    if 1 <= first_octet <= 126:
+
+        ip_class = "CLASS A"
+        subnet = "255.0.0.0"
+        cidr = "/8"
+
+        network = ipaddress.IPv4Network(
+            f"{ip_obj}/8",
+            strict=False
+        )
+
+    elif first_octet == 127:
+
+        ip_class = "LOOPBACK"
+        subnet = "N/A"
+        cidr = "127.0.0.0/8"
+
+        network = ipaddress.IPv4Network("127.0.0.0/8")
+
+    elif 128 <= first_octet <= 191:
+
+        ip_class = "CLASS B"
+        subnet = "255.255.0.0"
+        cidr = "/16"
+
+        network = ipaddress.IPv4Network(
+            f"{ip_obj}/16",
+            strict=False
+        )
+
+    elif 192 <= first_octet <= 223:
+
+        ip_class = "CLASS C"
+        subnet = "255.255.255.0"
+        cidr = "/24"
+
+        network = ipaddress.IPv4Network(
+            f"{ip_obj}/24",
+            strict=False
+        )
+
+    elif 224 <= first_octet <= 239:
+
+        ip_class = "CLASS D"
+        subnet = "N/A"
+        cidr = "N/A"
+        network = None
+
+    elif 240 <= first_octet <= 255:
+
+        ip_class = "CLASS E"
+        subnet = "N/A"
+        cidr = "N/A"
+        network = None
+
+    else:
+
+        ip_class = "RESERVED"
+        subnet = "N/A"
+        cidr = "N/A"
+        network = None
+
+    if network:
+        network_address = str(network.network_address)
+        broadcast_address = str(network.broadcast_address)
+    else:
+        network_address = "N/A"
+        broadcast_address = "N/A"
+
+    return {
+        "ip": str(ip_obj),
+        "ip_class": ip_class,
+        "subnet": subnet,
+        "cidr": cidr,
+        "network": network_address,
+        "broadcast": broadcast_address
+    }
+
+
+@app.route("/", methods=["GET"])
 def home():
 
     ip = request.args.get("ip", "").strip()
@@ -365,81 +461,10 @@ def home():
     error = None
 
     if ip:
-
         try:
-
-            address = ipaddress.IPv4Address(ip)
-
-            first = int(ip.split(".")[0])
-
-            if 1 <= first <= 126:
-
-                cls = "A"
-                mask = "255.0.0.0"
-                cidr = "/8"
-
-            elif 128 <= first <= 191:
-
-                cls = "B"
-                mask = "255.255.0.0"
-                cidr = "/16"
-
-            elif 192 <= first <= 223:
-
-                cls = "C"
-                mask = "255.255.255.0"
-                cidr = "/24"
-
-            elif 224 <= first <= 239:
-
-                cls = "D"
-                mask = "N/A"
-                cidr = "N/A"
-
-            elif 240 <= first <= 255:
-
-                cls = "E"
-                mask = "N/A"
-                cidr = "N/A"
-
-            else:
-
-                error = "Reserved IP range"
-
-                return render_template_string(
-                    HTML,
-                    ip=ip,
-                    result=None,
-                    error=error
-                )
-
-            if cls in ["A", "B", "C"]:
-
-                network = ipaddress.IPv4Network(
-                    f"{ip}{cidr}",
-                    strict=False
-                )
-
-                network_ip = str(network.network_address)
-                broadcast_ip = str(network.broadcast_address)
-
-            else:
-
-                network_ip = "N/A"
-                broadcast_ip = "N/A"
-
-            result = {
-                "ip": str(address),
-                "cls": cls,
-                "mask": mask,
-                "cidr": cidr,
-                "network": network_ip,
-                "broadcast": broadcast_ip
-            }
-
+            result = analyze_ip(ip)
         except ValueError:
-
-            error = "Invalid IPv4 address"
+            error = "Invalid IPv4 address. Example: 192.168.1.10"
 
     return render_template_string(
         HTML,
@@ -449,4 +474,9 @@ def home():
     )
 
 
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+
+    app.run(
+        host="0.0.0.0",
+        port=5000
+    )
